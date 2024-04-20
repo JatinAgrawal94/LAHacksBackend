@@ -6,14 +6,16 @@ dotenv.config()
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 const model = genAI.getGenerativeModel({ model: "gemini-pro"});
+const cors=require('cors')
+const PORT= 8080 || process.env.PORT
+app.use(cors())
 
-const PORT= 3000 || process.env.PORT
 app.get('/',(req,res)=>{
     res.send("Home page is ready")
 })
 
-
 app.use('/api/gemini/',geminiAPI);
+
 app.listen(PORT,()=>{
-    console.log("Server is listening at 3000")
+    console.log(`Server is listening at ${PORT}`)
 })

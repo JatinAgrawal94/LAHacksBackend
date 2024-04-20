@@ -1,1 +1,1 @@
-GET http://localhost:3000/api/gemini/places/food
+GET http://localhost:8080/api/gemini/places
