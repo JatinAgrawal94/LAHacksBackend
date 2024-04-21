@@ -7,7 +7,7 @@ const { GoogleGenerativeAI } = require("@google/generative-ai");
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 const model = genAI.getGenerativeModel({ model: "gemini-pro"});
 const cors=require('cors')
-const PORT= 8080 || process.env.PORT
+const PORT= process.env.PORT || 8080
 app.use(cors())
 
 app.get('/',(req,res)=>{
