@@ -49,7 +49,7 @@ gemini.get('/places/transportation',async(req,res)=>{
     //     return_date:"05/10/2024"
     // }
         const model = genAI.getGenerativeModel({ model: "gemini-pro"});
-    const prompt=`Give me all flight details with parameters source=${query.source} , destination=${query.destination},start_date:${query.start_date},return_date:${query.return_date}. Provide me multile results for inbound and outbound for the trip.Also give me links to those.Use format data={inbound_flight([Array having {flight_operator,departure_airport_Code,arrival_airport_Code,departure_time,arrival_time,depart_date,arrival_date,flight_id}]), outbound_flight([array having {flight_operator,departure_airport_code,arrival_airport_code,departure_time,arrival_time,depart_date,arrival_date,flight_id}])}.Give response in JSON format.Also give results according to my API plan.Name the array as "data"`
+    const prompt=`Give me all flight details with parameters source=${query.source} , destination=${query.destination},start_date:${query.start_date},return_date:${query.return_date}. Provide me multile results for inbound and outbound for the trip.Also give me links to those.Use format data={"inbound_flight"([Array having {flight_operator,departure_airport_Code,arrival_airport_Code,departure_time,arrival_time,depart_date,arrival_date,flight_id}]), "outbound_flight"([array having {flight_operator,departure_airport_code,arrival_airport_code,departure_time,arrival_time,depart_date,arrival_date,flight_id}])}.Give response in JSON format.Also give results according to my API plan.Name the array as "data"`
     try {
         const result = await model.generateContent(prompt);
         const response = await result.response;
@@ -70,7 +70,7 @@ gemini.get('/places/poi',async(req,res)=>{
         return_date:"05/10/2024"
     }
     const model = genAI.getGenerativeModel({ model: "gemini-pro"});
-    const prompt=`Give me top 5 points of interest and its all kind of information along with top 3 google reviews of various kinds for each in ${query.destination}, arrival_date:${query.start_date},return_date:${query.return_date}.Also give me date for on what days of my travel the place would be closed,if not then just say "open".Also give me links to those.Limit the review text to 8 words. Give response in JSON format.Name the array as "data"`
+    const prompt=`Give me top 5 points of interest and its all kind of information along with top 3 google reviews of various kinds for each in ${query.destination}, arrival_date:${query.start_date},return_date:${query.return_date}.name(name of the place),description(upto 10 words),link(website link if any), hours,reviews:{name,review(upto 10 words,rating}}. Give response in JSON format.Name the array as "data"`
     try {
         const result = await model.generateContent(prompt);
         const response = await result.response;
