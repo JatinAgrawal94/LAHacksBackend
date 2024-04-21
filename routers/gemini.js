@@ -41,15 +41,15 @@ gemini.get('/places',async(req,res)=>{
 })
 
 gemini.get('/places/transportation',async(req,res)=>{
-    // const query=req.query
-    const query={
-        source:"Los Angeles",
-        destination:"New York",
-        start_date:"05/05/2024",
-        return_date:"05/10/2024"
-    }
-    const model = genAI.getGenerativeModel({ model: "gemini-pro"});
-    const prompt=`Give me all flight details with parameters source=${query.source} , destination=${query.destination},start_date:${query.start_date},return_date:${query.return_date}. Provide me multile results for inbound and outbound for the trip.Also give me links to those.Give response in JSON format.Also give results according to my API plan.Name the array as "data"`
+    const query=req.query
+    // const query={
+    //     source:"Los Angeles",
+    //     destination:"New York",
+    //     start_date:"05/05/2024",
+    //     return_date:"05/10/2024"
+    // }
+        const model = genAI.getGenerativeModel({ model: "gemini-pro"});
+    const prompt=`Give me all flight details with parameters source=${query.source} , destination=${query.destination},start_date:${query.start_date},return_date:${query.return_date}. Provide me multile results for inbound and outbound for the trip.Also give me links to those.Use format data={inbound_flight([Array having {flight_operator,departure_airport_Code,arrival_airport_Code,departure_time,arrival_time,depart_date,arrival_date,flight_id}]), outbound_flight([array having {flight_operator,departure_airport_code,arrival_airport_code,departure_time,arrival_time,depart_date,arrival_date,flight_id}])}.Give response in JSON format.Also give results according to my API plan.Name the array as "data"`
     try {
         const result = await model.generateContent(prompt);
         const response = await result.response;
@@ -65,7 +65,6 @@ gemini.get('/places/transportation',async(req,res)=>{
 gemini.get('/places/poi',async(req,res)=>{
     // const query=req.query
     const query={
-        source:"Los Angeles",
         destination:"New York",
         start_date:"05/05/2024",
         return_date:"05/10/2024"
