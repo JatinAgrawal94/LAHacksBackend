@@ -17,14 +17,14 @@ function removeChar(text){
 }
 
 gemini.get('/places',async(req,res)=>{
-    // const query=req.query
-    const query={
-        source:"Los Angeles",
-        destination:"England",
-        budget:"10000",
-        start_date:"05/05/2024",
-        return_date:"05/10/2024"
-    }
+    const query=req.query
+    // const query={
+    //     source:"Los Angeles",
+    //     destination:"England",
+    //     budget:"10000",
+    //     start_date:"05/05/2024",
+    //     return_date:"05/10/2024"
+    // }
     const model = genAI.getGenerativeModel({ model: "gemini-pro"});
     const prompt = `Suggest me some places to visit. Consider the information. budget=$${query.budget}, current_location:${query.source},destination:${query.destination},leaving_date:${query.start_date},return_date:${query.return_date}.Consider all possible destinations with their coordinates and give a total estimate for each. Give me response in JSON format with keys as destination, coordinates(only numeric), estimated_cost(in dollars).Also give results according to my API plan.Name the array as "data"`
     // const prompt="Suggest me some flights from lax to sfo tomorrow along with links to book that flight. Give me response in JSON format."
