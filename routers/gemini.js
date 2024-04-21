@@ -48,8 +48,53 @@ gemini.get('/places/transportation',async(req,res)=>{
     //     start_date:"05/05/2024",
     //     return_date:"05/10/2024"
     // }
+    var prompts=[
+        `input: Give me all flight details with parameters source=${query.source} ,destination=${query.destination},start_date:${query.start_date},return_date:${query.return_date}. Provide me multile results for inbound and outbound for the trip.Also give me links to those.Use format data={\"inbound_flight\"([Array having {flight_operator,departure_airport_Code,arrival_airport_Code,departure_time,arrival_time,depart_date,arrival_date,flight_id}]), \"outbound_flight\"([array having {flight_operator,departure_airport_code,arrival_airport_code,departure_time,arrival_time,depart_date,arrival_date,flight_id}])}.Give response in JSON format.Also give results according to my API plan.Name the array as \"data\"",
+        "output: data={\"inbound_flight\"([Array having {flight_operator,departure_airport_code,arrival_airport_code,departure_time,arrival_time,depart_date,arrival_date,flight_id,cost(in dollars)}]), \"outbound_flight\"([array having {flight_operator,departure_airport_code,arrival_airport_code,departure_time,arrival_time,depart_date,arrival_date,flight_id}])}",
+        "input: Give me all flight details with parameters source=New York,destination=Los Angeles,start_date:20th April, 2024,return_date:25th April,2024 Provide me multile results for inbound and outbound for the trip.Also give me links to those."`
+      ]
+      
         const model = genAI.getGenerativeModel({ model: "gemini-pro"});
-    const prompt=`Give me all flight details with parameters source=${query.source} , destination=${query.destination},start_date:${query.start_date},return_date:${query.return_date}. Provide me multile results for inbound and outbound for the trip.Also give me links to those.Use format data={"inbound_flight"([Array having {flight_operator,departure_airport_Code,arrival_airport_Code,departure_time,arrival_time,depart_date,arrival_date,flight_id}]), "outbound_flight"([array having {flight_operator,departure_airport_code,arrival_airport_code,departure_time,arrival_time,depart_date,arrival_date,flight_id}])}.Give response in JSON format.Also give results according to my API plan.Name the array as "data"`
+    // const prompt=`Give me all flight details with parameters source=${query.source} , destination=${query.destination},start_date:${query.start_date},return_date:${query.return_date}. Provide me multile results for inbound and outbound for the trip.Also give me links to those.Use format data={"inbound_flight"([Array having {flight_operator,departure_airport_Code,arrival_airport_code,departure_time,arrival_time,depart_date,arrival_date,flight_id}]), "outbound_flight"([array having {flight_operator,departure_airport_code,arrival_airport_code,departure_time,arrival_time,depart_date,arrival_date,flight_id}])}.Give response in JSON format.Also give results according to my API plan.Name the array as "data"`
+
+    const prompt=`Flight Suggestions Request:
+
+    Source: ${query.source}
+    Destination: ${query.destination}
+    Departure_Date: ${query.start_date}
+    Return_Date: ${query.return_date}
+        
+    Please provide flight suggestions meeting the specified criteria, including both inbound and outbound flights. The response should include flight details with the following keys:
+    
+    {
+      "inbound_flights": [
+        {
+          "flight_id": "B8649",
+          "departure_date": "04/20/2024",
+          "arrival_date": "04/22/2024",
+          "departure_airport_code": "LAX",
+          "arrival_airport_code": "JFK",
+          "departure_time": "09:00",
+          "arrival_time": "08:00",
+          "cost_of_flight": "$800",
+          "flight_operator": "RandomAirways"
+        }
+      ],
+      "outbound_flights": [
+        {
+          "flight_id": "B8649",
+          "departure_date": "04/26/2024",
+          "arrival_date": "04/27/2024",
+          "departure_airport_code": "JFK",
+          "arrival_airport_code": "LAX",
+          "departure_time": "09:00",
+          "arrival_time": "18:00",
+          "cost_of_flight": "$900",
+          "flight_operator": "SkyAirways"
+        }
+      ]
+    }
+    `
     try {
         const result = await model.generateContent(prompt);
         const response = await result.response;
